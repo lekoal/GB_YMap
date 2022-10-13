@@ -1,8 +1,9 @@
 package com.example.gbymap.ui
 
-import android.Manifest
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationListener
 import android.location.LocationManager
@@ -11,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -35,6 +37,7 @@ class MainScreenFragment : Fragment() {
         super.onCreate(savedInstanceState)
         MapKitFactory.setApiKey(BuildConfig.YANDEX_MAPKIT_API)
         MapKitFactory.initialize(requireContext())
+        setupLocation()
     }
 
     override fun onCreateView(
@@ -49,7 +52,6 @@ class MainScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mapManager = MapManager(binding.mapView)
         mapManager.moveTo(59.939918, 30.316089)
-
         myLocationSetOnClick()
     }
 
@@ -74,8 +76,10 @@ class MainScreenFragment : Fragment() {
     private fun checkLocationPermission() {
         activity?.let {
             when {
-                ContextCompat.checkSelfPermission(it, ACCESS_FINE_LOCATION) ==
-                        PackageManager.PERMISSION_GRANTED -> {
+                (ContextCompat.checkSelfPermission(it, ACCESS_FINE_LOCATION) ==
+                        PackageManager.PERMISSION_GRANTED) &&
+                        (ContextCompat.checkSelfPermission(it, ACCESS_COARSE_LOCATION) ==
+                                PackageManager.PERMISSION_GRANTED) && checkGPS() -> {
                     getLocation()
                 }
                 shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)
@@ -112,6 +116,7 @@ class MainScreenFragment : Fragment() {
     private fun requestPermission() {
         val permissions = ArrayList<String>()
         permissions.add(ACCESS_FINE_LOCATION)
+        permissions.add(ACCESS_COARSE_LOCATION)
         ActivityCompat.requestPermissions(requireActivity(), permissions.toTypedArray(), 1)
     }
 
@@ -120,29 +125,36 @@ class MainScreenFragment : Fragment() {
                 LocationManager
         locationListener = LocationListener { location ->
             Log.i("MY_TAG", "Current Location -  ${location.latitude}:${location.longitude}")
+            Toast.makeText(
+                requireContext(),
+                "Current Location -  ${location.latitude}:${location.longitude}",
+                Toast.LENGTH_SHORT
+            ).show()
+            mapManager.moveTo(location.latitude, location.longitude)
+            locationManager!!.removeUpdates(locationListener!!)
         }
     }
 
     private fun getLocation() {
-        setupLocation()
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermission()
-        } else {
-            try {
-                locationManager!!.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, 0L, 0f, locationListener!!
-                )
-            } catch (e: SecurityException) {
-                Log.d("", "Security exception, no location")
-            }
+        try {
+            locationManager!!.requestLocationUpdates(
+                LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener!!
+            )
+            locationManager!!.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER, 0L, 0f, locationListener!!
+            )
+        } catch (e: SecurityException) {
+            Log.d("", "Security exception, no location")
         }
     }
 
+    private fun checkGPS(): Boolean {
+        val permissionGranted =
+            locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER) ?: false
+        if (!permissionGranted) {
+            val intent = Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(intent)
+        }
+        return permissionGranted
+    }
 }
