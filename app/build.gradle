@@ -17,6 +17,12 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildTypes.each {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("apikeys.properties").newDataInputStream())
+        def yandex_map_api = properties.getProperty("YANDEX_MAPKIT_API", "")
+        it.buildConfigField "String", "YANDEX_MAPKIT_API", yandex_map_api
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -51,6 +57,6 @@ dependencies {
     implementation 'com.yandex.android:maps.mobile:4.2.1-full'
 
     //Navigation
-    implementation "android.arch.navigation:navigation-fragment:2.5.2"
-    implementation "android.arch.navigation:navigation-ui:2.5.2"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.5.2"
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.2"
 }
