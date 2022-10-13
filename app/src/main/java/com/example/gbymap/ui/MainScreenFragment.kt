@@ -12,15 +12,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.gbymap.BuildConfig
 import com.example.gbymap.R
 import com.example.gbymap.databinding.FragmentMainScreenBinding
+import com.example.gbymap.utils.ADialog
 import com.example.gbymap.utils.MapManager
+import com.example.gbymap.utils.RequestPermissions
 import com.yandex.mapkit.MapKitFactory
 
 class MainScreenFragment : Fragment() {
@@ -32,6 +31,8 @@ class MainScreenFragment : Fragment() {
 
     private var locationManager: LocationManager? = null
     private var locationListener: LocationListener? = null
+
+    private lateinit var alertDialog: ADialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +54,7 @@ class MainScreenFragment : Fragment() {
         mapManager = MapManager(binding.mapView)
         mapManager.moveTo(59.939918, 30.316089)
         myLocationSetOnClick()
+        alertDialog = ADialog(requireActivity())
     }
 
     override fun onStart() {
@@ -74,62 +76,45 @@ class MainScreenFragment : Fragment() {
     }
 
     private fun checkLocationPermission() {
-        activity?.let {
-            when {
-                (ContextCompat.checkSelfPermission(it, ACCESS_FINE_LOCATION) ==
-                        PackageManager.PERMISSION_GRANTED) &&
-                        (ContextCompat.checkSelfPermission(it, ACCESS_COARSE_LOCATION) ==
-                                PackageManager.PERMISSION_GRANTED) && checkGPS() -> {
-                    getLocation()
-                }
-                shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)
-                -> {
-                    showRationaleDialog()
-                }
-                else -> {
-                    requestPermission()
-                }
+        when {
+            (ContextCompat.checkSelfPermission(
+                requireActivity(),
+                ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED) &&
+                    (ContextCompat.checkSelfPermission(
+                        requireActivity(),
+                        ACCESS_COARSE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED) &&
+                    checkGPS() -> {
+                getLocation()
+            }
+            shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)
+            -> {
+                showRationaleDialog()
+            }
+            else -> {
+                RequestPermissions.location(requireActivity())
             }
         }
     }
 
     private fun showRationaleDialog() {
-        activity?.let {
-            AlertDialog.Builder(it)
-                .setTitle(getString(R.string.location_permission_title))
-                .setMessage(getString(R.string.location_permission_message))
-                .setPositiveButton(
-                    getString(R.string.location_permission_positive_button_text)
-                ) { _, _ ->
-                    requestPermission()
-                }
-                .setNegativeButton(
-                    getString(R.string.location_permission_negative_button_text)
-                ) { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .create()
-                .show()
-        }
-    }
-
-    private fun requestPermission() {
-        val permissions = ArrayList<String>()
-        permissions.add(ACCESS_FINE_LOCATION)
-        permissions.add(ACCESS_COARSE_LOCATION)
-        ActivityCompat.requestPermissions(requireActivity(), permissions.toTypedArray(), 1)
+        alertDialog.show(
+            getString(R.string.location_permission_title),
+            getString(R.string.location_permission_message),
+            getString(R.string.location_permission_positive_button_text),
+            getString(R.string.location_permission_negative_button_text)
+        )
     }
 
     private fun setupLocation() {
         locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as
                 LocationManager
         locationListener = LocationListener { location ->
-            Log.i("MY_TAG", "Current Location -  ${location.latitude}:${location.longitude}")
-            Toast.makeText(
-                requireContext(),
-                "Current Location -  ${location.latitude}:${location.longitude}",
-                Toast.LENGTH_SHORT
-            ).show()
+            Log.i(
+                "MY_TAG",
+                "Current Location -  ${location.latitude}:${location.longitude}"
+            )
             mapManager.moveTo(location.latitude, location.longitude)
             locationManager!!.removeUpdates(locationListener!!)
         }
@@ -152,9 +137,15 @@ class MainScreenFragment : Fragment() {
         val permissionGranted =
             locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER) ?: false
         if (!permissionGranted) {
+            alertDialog.show(
+                getString(R.string.gps_activation_title),
+                getString(R.string.gps_activation_message),
+
+            )
             val intent = Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             startActivity(intent)
         }
         return permissionGranted
     }
+
 }

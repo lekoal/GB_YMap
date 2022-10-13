@@ -6,4 +6,6 @@
     <string name="location_permission_positive_button_text">Дать разрешение</string>
     <string name="location_permission_negative_button_text">Отмена</string>
     <string name="location_error">Не могу определить местоположение</string>
+    <string name="gps_activation_title">Необходимо действие</string>
+    <string name="gps_activation_message">Для определения местоположения необходимо включить геолокацию</string>
 </resources>
