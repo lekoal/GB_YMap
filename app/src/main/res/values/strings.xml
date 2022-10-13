@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">GB YMap</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="location_permission_title">Необходимо действие</string>
+    <string name="location_permission_message">Для доступа к текущему местоположению необходимо дать разрешение на геолокацию</string>
+    <string name="location_permission_positive_button_text">Дать разрешение</string>
+    <string name="location_permission_negative_button_text">Отмена</string>
+    <string name="location_error">Не могу определить местоположение</string>
 </resources>
