@@ -3,7 +3,6 @@ package com.example.gbymap.ui
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationListener
 import android.location.LocationManager
@@ -20,7 +19,12 @@ import com.example.gbymap.databinding.FragmentMainScreenBinding
 import com.example.gbymap.utils.ADialog
 import com.example.gbymap.utils.MapManager
 import com.example.gbymap.utils.RequestPermissions
+import com.yandex.mapkit.MapKit
 import com.yandex.mapkit.MapKitFactory
+import com.yandex.mapkit.mapview.MapView
+
+const val LOCATION_PERMISSION = "location_permission"
+const val LOCATION_ENABLE = "location_enable"
 
 class MainScreenFragment : Fragment() {
 
@@ -31,6 +35,8 @@ class MainScreenFragment : Fragment() {
 
     private var locationManager: LocationManager? = null
     private var locationListener: LocationListener? = null
+
+    private lateinit var mapView: MapView
 
     private lateinit var alertDialog: ADialog
 
@@ -51,10 +57,14 @@ class MainScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mapManager = MapManager(binding.mapView)
+        mapView = binding.mapView
+        mapManager = MapManager(mapView)
         mapManager.moveTo(59.939918, 30.316089)
         myLocationSetOnClick()
         alertDialog = ADialog(requireActivity())
+        val mapKit: MapKit = MapKitFactory.getInstance()
+        val userPin = mapKit.createUserLocationLayer(mapView.mapWindow)
+        userPin.isVisible = true
     }
 
     override fun onStart() {
@@ -100,6 +110,7 @@ class MainScreenFragment : Fragment() {
 
     private fun showRationaleDialog() {
         alertDialog.show(
+            LOCATION_PERMISSION,
             getString(R.string.location_permission_title),
             getString(R.string.location_permission_message),
             getString(R.string.location_permission_positive_button_text),
@@ -108,6 +119,7 @@ class MainScreenFragment : Fragment() {
     }
 
     private fun setupLocation() {
+
         locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as
                 LocationManager
         locationListener = LocationListener { location ->
@@ -118,6 +130,7 @@ class MainScreenFragment : Fragment() {
             mapManager.moveTo(location.latitude, location.longitude)
             locationManager!!.removeUpdates(locationListener!!)
         }
+
     }
 
     private fun getLocation() {
@@ -138,12 +151,12 @@ class MainScreenFragment : Fragment() {
             locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER) ?: false
         if (!permissionGranted) {
             alertDialog.show(
+                LOCATION_ENABLE,
                 getString(R.string.gps_activation_title),
                 getString(R.string.gps_activation_message),
-
+                getString(R.string.gps_activation_positive_button_text),
+                getString(R.string.gps_activation_negative_button_text)
             )
-            val intent = Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-            startActivity(intent)
         }
         return permissionGranted
     }

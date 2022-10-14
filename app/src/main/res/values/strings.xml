@@ -8,4 +8,6 @@
     <string name="location_error">Не могу определить местоположение</string>
     <string name="gps_activation_title">Необходимо действие</string>
     <string name="gps_activation_message">Для определения местоположения необходимо включить геолокацию</string>
+    <string name="gps_activation_positive_button_text">Перейти к настройкам</string>
+    <string name="gps_activation_negative_button_text">Отмена</string>
 </resources>
