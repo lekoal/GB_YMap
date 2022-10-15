@@ -11,17 +11,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.gbymap.BuildConfig
 import com.example.gbymap.R
 import com.example.gbymap.databinding.FragmentMainScreenBinding
+import com.example.gbymap.domain.marks.MarksEntity
 import com.example.gbymap.utils.ADialog
 import com.example.gbymap.utils.MapManager
 import com.example.gbymap.utils.RequestPermissions
 import com.yandex.mapkit.MapKit
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.mapview.MapView
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
 
 const val LOCATION_PERMISSION = "location_permission"
 const val LOCATION_ENABLE = "location_enable"
@@ -39,6 +43,8 @@ class MainScreenFragment : Fragment() {
     private lateinit var mapView: MapView
 
     private lateinit var alertDialog: ADialog
+
+    private val viewModel: MarksViewModel by viewModel(named("marks_view_model"))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +66,9 @@ class MainScreenFragment : Fragment() {
         mapView = binding.mapView
         mapManager = MapManager(mapView)
         mapManager.moveTo(59.939918, 30.316089)
+        checkSavedMarks()
         myLocationSetOnClick()
+        addMarkSetOnClick()
         alertDialog = ADialog(requireActivity())
         val mapKit: MapKit = MapKitFactory.getInstance()
         val userPin = mapKit.createUserLocationLayer(mapView.mapWindow)
@@ -85,6 +93,64 @@ class MainScreenFragment : Fragment() {
         }
     }
 
+    private fun addMarkSetOnClick() {
+        binding.btnAddMark.setOnClickListener {
+            addMarkScreenVisibility(true)
+
+            addMarkNoButtonSetOnClick()
+            addMarkYesButtonSetOnClick()
+        }
+    }
+
+    private fun addMarkNoButtonSetOnClick() {
+        binding.addMarkCancel.setOnClickListener {
+            addMarkScreenVisibility(false)
+        }
+    }
+
+    private fun addMarkScreenVisibility(isVisible: Boolean) {
+        if (isVisible) {
+            binding.blockScreen.visibility = View.VISIBLE
+            binding.addMarkScreen.visibility = View.VISIBLE
+            binding.blockScreen.isClickable = true
+        } else {
+            binding.blockScreen.isClickable = false
+            binding.addMarkScreen.visibility = View.GONE
+            binding.blockScreen.visibility = View.GONE
+        }
+    }
+
+    private fun addMarkYesButtonSetOnClick() {
+        binding.addMarkAccept.setOnClickListener {
+            if (isDouble(binding.markLat.text.toString()) &&
+                    isDouble(binding.markLong.text.toString())) {
+                if (!binding.markName.text.isNullOrEmpty()) {
+                    val lat = binding.markLat.text.toString().toDouble()
+                    val lon = binding.markLong.text.toString().toDouble()
+                    val markName = binding.markName.text.toString()
+                    val mark = MarksEntity(
+                        name = markName,
+                        latitude = lat,
+                        longitude = lon
+                    )
+                    addMarkScreenVisibility(false)
+                    mapManager.addMark(lat, lon)
+                    viewModel.insertMark(mark)
+                } else {
+                    Toast.makeText(requireContext(), "Введите имя", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Некорректное значение", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
+    private fun isDouble(value: String): Boolean {
+        return value.toDoubleOrNull() != null
+    }
+
     private fun checkLocationPermission() {
         when {
             (ContextCompat.checkSelfPermission(
@@ -105,6 +171,13 @@ class MainScreenFragment : Fragment() {
             else -> {
                 RequestPermissions.location(requireActivity())
             }
+        }
+    }
+
+    private fun checkSavedMarks() {
+        viewModel.getMarks()
+        viewModel.marks.observe(viewLifecycleOwner) {
+            mapManager.addListMarks(it)
         }
     }
 

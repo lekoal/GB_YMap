@@ -10,4 +10,12 @@
     <string name="gps_activation_message">Для определения местоположения необходимо включить геолокацию</string>
     <string name="gps_activation_positive_button_text">Перейти к настройкам</string>
     <string name="gps_activation_negative_button_text">Отмена</string>
+    <string name="mark_name_hint">Имя метки</string>
+    <string name="mark_name_helper">Введите имя</string>
+    <string name="mark_lat_hint">lat</string>
+    <string name="mark_lat_helper">Lat</string>
+    <string name="mark_long_hint">long</string>
+    <string name="mark_long_helper">Long</string>
+    <string name="no">no</string>
+    <string name="yes">yes</string>
 </resources>
