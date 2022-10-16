@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class MarksEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val name: String,
-    val latitude: Double,
-    val longitude: Double
+    var name: String,
+    var latitude: Double,
+    var longitude: Double
 )

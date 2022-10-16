@@ -16,6 +16,13 @@ class MarksViewModel(
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private val _marks = MutableLiveData<List<MarksEntity>>()
+    val marks: LiveData<List<MarksEntity>> = _marks
+
+    private val _edited = MutableLiveData(false)
+    val edited: LiveData<Boolean> = _edited
+
+    private val _editedMark = MutableLiveData<MarksEntity>()
+    val editedMark: LiveData<MarksEntity> = _editedMark
 
     override fun getMarks() {
         coroutineScope.launch {
@@ -24,8 +31,6 @@ class MarksViewModel(
             )
         }
     }
-
-    var marks: LiveData<List<MarksEntity>> = _marks
 
     override fun insertMark(mark: MarksEntity) {
         coroutineScope.launch {
@@ -44,6 +49,16 @@ class MarksViewModel(
             marksDBHelper.delete(mark)
         }
     }
+
+    override fun updateMarkHelper(mark: MarksEntity) {
+        _edited.postValue(true)
+        _editedMark.postValue(mark)
+    }
+
+    override fun updateMarkEnd() {
+        _edited.postValue(false)
+    }
+
 
     override fun onCleared() {
         coroutineScope.cancel()
