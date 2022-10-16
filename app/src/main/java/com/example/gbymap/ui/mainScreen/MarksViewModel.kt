@@ -1,4 +1,4 @@
-package com.example.gbymap.ui
+package com.example.gbymap.ui.mainScreen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

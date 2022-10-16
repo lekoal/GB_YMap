@@ -1,4 +1,4 @@
-package com.example.gbymap.ui
+package com.example.gbymap.ui.mainScreen
 
 import com.example.gbymap.domain.marks.MarksEntity
 

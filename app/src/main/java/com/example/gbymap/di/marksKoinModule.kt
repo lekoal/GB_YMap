@@ -3,7 +3,7 @@ package com.example.gbymap.di
 import com.example.gbymap.data.marks.MarksDatabaseHelperImpl
 import com.example.gbymap.domain.marks.MarksDatabaseBuilder
 import com.example.gbymap.domain.marks.MarksDatabaseHelper
-import com.example.gbymap.ui.MarksViewModel
+import com.example.gbymap.ui.mainScreen.MarksViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named

@@ -1,4 +1,4 @@
-package com.example.gbymap.ui
+package com.example.gbymap.ui.mainScreen
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.example.gbymap.BuildConfig
 import com.example.gbymap.R
 import com.example.gbymap.databinding.FragmentMainScreenBinding
@@ -66,9 +67,9 @@ class MainScreenFragment : Fragment() {
         mapView = binding.mapView
         mapManager = MapManager(mapView)
         mapManager.moveTo(59.939918, 30.316089)
-        checkSavedMarks()
         myLocationSetOnClick()
         addMarkSetOnClick()
+        openMarksManagerOnClick()
         alertDialog = ADialog(requireActivity())
         val mapKit: MapKit = MapKitFactory.getInstance()
         val userPin = mapKit.createUserLocationLayer(mapView.mapWindow)
@@ -79,6 +80,11 @@ class MainScreenFragment : Fragment() {
         super.onStart()
         mapManager.onStart()
         MapKitFactory.getInstance().onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkSavedMarks()
     }
 
     override fun onStop() {
@@ -232,6 +238,12 @@ class MainScreenFragment : Fragment() {
             )
         }
         return permissionGranted
+    }
+
+    private fun openMarksManagerOnClick() {
+        binding.btnMarksManager.setOnClickListener { view ->
+            view.findNavController().navigate(R.id.action_mainScreenFragment_to_marksManagerFragment)
+        }
     }
 
 }

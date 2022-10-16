@@ -4,8 +4,8 @@ import android.content.Intent
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
-import com.example.gbymap.ui.LOCATION_ENABLE
-import com.example.gbymap.ui.LOCATION_PERMISSION
+import com.example.gbymap.ui.mainScreen.LOCATION_ENABLE
+import com.example.gbymap.ui.mainScreen.LOCATION_PERMISSION
 
 class ADialog(private val activity: FragmentActivity) {
     fun show(

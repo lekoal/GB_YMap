@@ -1,52 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.mainScreen.MainScreenFragment">
+    tools:context=".ui.marksManager.MarksManagerFragment">
 
-    <com.yandex.mapkit.mapview.MapView
-        android:id="@+id/map_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/btn_search_my_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/search_my_location_button_margin_end"
-        android:layout_marginBottom="@dimen/search_my_location_button_margin_bottom"
-        android:background="@color/transparent_500"
-        android:src="@drawable/ic_baseline_location_searching_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/btn_add_mark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/search_my_location_button_margin_end"
-        android:layout_marginBottom="@dimen/add_mark_button_margin_bottom"
-        android:background="@color/transparent_500"
-        android:src="@drawable/ic_baseline_add_circle_outline_24"
-        app:layout_constraintBottom_toTopOf="@id/btn_search_my_location"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/btn_marks_manager"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_playlist_add_check_circle_24"
-        android:layout_marginEnd="@dimen/search_my_location_button_margin_end"
-        android:layout_marginBottom="@dimen/marks_manager_button_margin_bottom"
-        android:background="@color/transparent_500"
-        app:layout_constraintBottom_toTopOf="@id/btn_add_mark"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_marks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_marks_manager" />
 
     <FrameLayout
         android:id="@+id/block_screen"
@@ -54,19 +18,17 @@
         android:layout_height="match_parent"
         android:alpha="0.7"
         android:background="@color/white"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/add_mark_screen"
+        android:id="@+id/edit_mark_screen"
         android:layout_width="@dimen/add_mark_screen_width"
         android:layout_height="@dimen/add_mark_screen_height"
+        android:layout_gravity="center"
         android:visibility="gone"
         app:cardBackgroundColor="@color/lime_50"
         app:cardCornerRadius="@dimen/add_mark_screen_corner_radius"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible">
 
         <LinearLayout
@@ -158,5 +120,4 @@
 
     </androidx.cardview.widget.CardView>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
