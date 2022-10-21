@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="5dp">
+
+    <LinearLayout
+        android:id="@+id/item_marks_manager_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lime_50"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_marks_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            tools:text="Mark's name" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_marks_lat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            tools:text="lat" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_marks_lon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            tools:text="lon" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/item_marks_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:background="@color/transparent_500"
+            android:src="@drawable/ic_baseline_edit_24" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/item_marks_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent_500"
+            android:src="@drawable/ic_baseline_delete_forever_24" />
+
+    </LinearLayout>
+
+</FrameLayout>

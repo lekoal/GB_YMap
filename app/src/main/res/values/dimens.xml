@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="search_my_location_button_margin_end">15dp</dimen>
+    <dimen name="search_my_location_button_margin_bottom">30dp</dimen>
+    <dimen name="add_mark_button_margin_bottom">10dp</dimen>
+    <dimen name="add_mark_screen_width">200dp</dimen>
+    <dimen name="add_mark_screen_height">220dp</dimen>
+    <dimen name="add_mark_screen_corner_radius">30dp</dimen>
+    <dimen name="text_input_layout_height">60dp</dimen>
+    <dimen name="text_input_edit_text_height">35dp</dimen>
+    <dimen name="add_mark_screen_inner_margin_horizontal">20dp</dimen>
+    <dimen name="marks_manager_button_margin_bottom">10dp</dimen>
+</resources>

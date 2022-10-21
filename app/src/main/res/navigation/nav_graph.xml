@@ -7,7 +7,16 @@
 
     <fragment
         android:id="@+id/mainScreenFragment"
-        android:name="com.example.gbymap.MainScreenFragment"
+        android:name="com.example.gbymap.ui.mainScreen.MainScreenFragment"
         android:label="fragment_main_screen"
-        tools:layout="@layout/fragment_main_screen" />
+        tools:layout="@layout/fragment_main_screen" >
+        <action
+            android:id="@+id/action_mainScreenFragment_to_marksManagerFragment"
+            app:destination="@id/marksManagerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/marksManagerFragment"
+        android:name="com.example.gbymap.ui.marksManager.MarksManagerFragment"
+        android:label="fragment_marks_manager"
+        tools:layout="@layout/fragment_marks_manager" />
 </navigation>

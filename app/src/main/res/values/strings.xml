@@ -1,4 +1,21 @@
 <resources>
     <string name="app_name">GB YMap</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="location_permission_title">Необходимо действие</string>
+    <string name="location_permission_message">Для доступа к текущему местоположению необходимо дать разрешение на геолокацию</string>
+    <string name="location_permission_positive_button_text">Дать разрешение</string>
+    <string name="location_permission_negative_button_text">Отмена</string>
+    <string name="location_error">Не могу определить местоположение</string>
+    <string name="gps_activation_title">Необходимо действие</string>
+    <string name="gps_activation_message">Для определения местоположения необходимо включить геолокацию</string>
+    <string name="gps_activation_positive_button_text">Перейти к настройкам</string>
+    <string name="gps_activation_negative_button_text">Отмена</string>
+    <string name="mark_name_hint">Имя метки</string>
+    <string name="mark_name_helper">Введите имя</string>
+    <string name="mark_lat_hint">lat</string>
+    <string name="mark_lat_helper">Lat</string>
+    <string name="mark_long_hint">long</string>
+    <string name="mark_long_helper">Long</string>
+    <string name="no">no</string>
+    <string name="yes">yes</string>
 </resources>
